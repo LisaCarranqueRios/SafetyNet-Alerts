@@ -1,6 +1,7 @@
 package com.safetynet.alerts.model;
 
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,10 +19,13 @@ public class Medical {
     @GeneratedValue
     private int id;
     @Column(name="last_name")
+    @Length(max=25)
     private String lastName;
     @Column(name="fist_name")
+    @Length(max=25)
     private String firstName;
     @Column(name="birthdate")
+    @Length(max=25)
     private String birthdate;
     @ElementCollection
     @Column(name="medications")
