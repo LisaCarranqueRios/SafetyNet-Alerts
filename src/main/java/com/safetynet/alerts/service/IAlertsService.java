@@ -1,25 +1,24 @@
 package com.safetynet.alerts.service;
 
-import com.safetynet.alerts.mapper.PersonMapper;
 import com.safetynet.alerts.model.Firestation;
 import com.safetynet.alerts.model.Medical;
 import com.safetynet.alerts.model.Person;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 public interface IAlertsService {
 
-    /**
-     * Method to manage person, firestation, medical CRUD
-     *
+    /*
+        Methods to manage person, firestation, medical data
      */
 
     /**
      * Manage persons
+     *
      * @return
      */
     public List<Person> listPerson();
@@ -28,15 +27,16 @@ public interface IAlertsService {
 
     public ResponseEntity<Object> addPerson(Person person);
 
-    public void addPersons(List<Person>  persons);
+    public void addPersons(List<Person> persons);
 
-    public void delelePerson(int id);
+    public void deletePerson(int id);
 
     public void updatePerson(Person person);
 
 
     /**
      * Manage firestations
+     *
      * @return
      */
     public List<Firestation> listFirestation();
@@ -47,12 +47,13 @@ public interface IAlertsService {
 
     public void addFirestations(List<Firestation> firestations);
 
-    public void deleleFirestation(int id);
+    public void deleteFirestation(int id);
 
     public void updateFirestation(Firestation firestation);
 
     /**
      * manage medical
+     *
      * @return
      */
     public List<Medical> listMedical();
@@ -63,56 +64,48 @@ public interface IAlertsService {
 
     public void addMedicals(List<Medical> medicals);
 
-    public void deleleMedical(int id);
+    public void deleteMedical(int id);
 
     public void updateMedical(Medical medical);
 
 
     /**
-     *
-     */
-
-    /**
      * This person is responsible for getting :
      * - email
      * for each person in the targeted city
+     *
      * @param city
      * @return
      * @throws IOException
      */
-    public List<PersonMapper> getPersonEmail(String city);
-
-    /**
-     * This person is responsible for getting person information for each person
-     * @return
-     */
-    public List<Person> getPersonInformation();
+    public List<String> getPersonEmail(String city);
 
     /**
      * This person is responsible for getting
-     * person information
+     * - person information
      * for a person targeted by lastName and firstName
-     * @param names
+     *
      * @return
      */
-    public Person getOnePersonInformation(List<String> names);
+    public List<Person> getPersonInformationByNames(@RequestParam String firstName, @RequestParam String lastName);
 
     /**
      * This method is responsible for getting
-     * lastName, firstName, age
-     * medical data
-     * for person covered by firestations targeted by on station number
+     * - lastName, firstName, age
+     * - medical data
+     * for persons covered by the firestations targeted by on station number
+     *
      * @param station
-     * @param personWithMedication
      * @return
      */
-    public List<Person> getPersonAtAddresse(int station, List<Person> personWithMedication);
+    public List<Person> getPersonAtAddress(int station);
 
     /**
      * This method is responsible for getting
-     * lastName, firstName, age
-     * medical data
-     * for person covered by firestations targeted by station number
+     * - lastName, firstName, age
+     * - medical data
+     * for persons covered by the firestations targeted by station number
+     *
      * @param ids
      * @return
      */
@@ -120,39 +113,43 @@ public interface IAlertsService {
 
     /**
      * This method is responsible for getting :
-     * lastName, firstName, phone, age
-     * medical data
-     * for person covered by firestation targeted by address
+     * - lastName, firstName, phone, age
+     * - medical data
+     * for persons covered by the firestations targeted by address
+     *
      * @param address
      * @return
      */
-    public List<Person>  getPersonAtAddressWithFirestationCoverage(String address);
+    public List<Person> getPersonAtAddressWithFirestationCoverage(String address);
 
     /**
      * This method is responsible for getting :
-     * phone number
-     * for persons covered by firestation targeted by station number
+     * - phone number
+     * for persons covered by the firestations targeted by station number
+     *
      * @param station
      * @return
      */
-    public List<PersonMapper> getPersonCoveredByFirestationPhoneNumber(@PathVariable("station") int station);
+    public List<Person> getPersonCoveredByFirestationPhoneNumber(@PathVariable("station") int station);
 
     /**
      * This method is responsible for getting :
-     * firstName, lastName, age
-     * and a list of family members
-     * for children covered by firestation targeted by one address
+     * - firstName, lastName, age
+     * - a list of family members
+     * for children covered by the firestations targeted by one address
+     *
      * @param address
      * @return
      */
-    public HashMap<List<Person>, List<Person>>  getChildrenAtAddress(String address);
+    public List<Object> getChildrenAtAddress(String address);
 
 
     /**
      * This method is reponsible for getting :
-     * firstName, lastName, phone
-     * children and adults count
+     * - firstName, lastName, phone
+     * - children and adults count
      * covered by firestations targeted by station number
+     *
      * @param station
      * @return
      */

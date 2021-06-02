@@ -1,14 +1,18 @@
 package com.safetynet.alerts.mapper;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.safetynet.alerts.model.Medical;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Timestamp;
-
 @Getter
 @Setter
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
+/**
+ * This class is used to map person data output
+ */
 public class PersonMapper {
 
     private String firstName;
@@ -17,7 +21,7 @@ public class PersonMapper {
     private Integer age;
     private String email;
     private String address;
-    private MedicalRecordMapper medicalRecord;
-    private String station;
-
+    private Medical medical;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private int station;
 }
