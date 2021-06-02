@@ -27,132 +27,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class AlertsServiceTest {
 
-
-    @Mock
-    FirestationDao firestationDao;
-
     @Mock
     PersonDao personDao;
-
-    @Mock
-    MedicalDao medicalDao;
 
     @Mock
     AlertsUtils alertsUtils;
 
     @InjectMocks
     AlertsService alertsService;
-
-
-    @Test
-    public void listPerson() {
-        alertsService.listPerson();
-        verify(personDao, times(1)).findAll();
-    }
-
-    @Test
-    public void displayPerson() {
-        alertsService.displayPerson(1);
-        verify(personDao, times(1)).findById(anyInt());
-    }
-
-    @Test
-    public void addPerson() {
-        alertsService.addPerson(Person.builder().id(1).build());
-        verify(personDao, times(1)).save(any());
-    }
-
-    @Test
-    public void addPersons() {
-        List<Person> personList = List.of(new Person());
-        alertsService.addPersons(personList);
-        verify(medicalDao, times(1)).findAll();
-        verify(firestationDao, times(1)).findAll();
-        verify(personDao, times(1)).save(any());
-    }
-
-    @Test
-    public void deletePerson() {
-        alertsService.deletePerson(1);
-        verify(personDao, times(1)).deleteById(anyInt());
-    }
-
-    @Test
-    public void updatePerson() {
-        alertsService.updatePerson(new Person());
-        verify(personDao, times(1)).save(any());
-    }
-
-    @Test
-    public void listFirestation() {
-        alertsService.listFirestation();
-        verify(firestationDao, times(1)).findAll();
-    }
-
-    @Test
-    public void displayFirestation() {
-        alertsService.displayFirestation(1);
-        verify(firestationDao, times(1)).findById(anyInt());
-    }
-
-    @Test
-    public void addFirestation() {
-        alertsService.addFirestation(Firestation.builder().id(1).build());
-        verify(firestationDao, times(1)).save(any());
-    }
-
-    @Test
-    public void addFirestations() {
-        List<Firestation> firestations = List.of(Firestation.builder().build());
-        alertsService.addFirestations(firestations);
-        verify(firestationDao, times(1)).save(any());
-    }
-
-    @Test
-    public void deleteFirestation() {
-        alertsService.deleteFirestation(1);
-        verify(firestationDao, times(1)).deleteById(anyInt());
-    }
-
-    @Test
-    public void updateFirestation() {
-        alertsService.updateFirestation(Firestation.builder().build());
-        verify(firestationDao, times(1)).save(any());
-    }
-
-    @Test
-    public void listMedical() {
-        alertsService.listMedical();
-        verify(medicalDao, times(1)).findAll();
-    }
-    @Test
-    public void displayMedical() {
-        alertsService.displayMedical(1);
-        verify(medicalDao, times(1)).findById(anyInt());
-    }
-    @Test
-    public void addMedical() {
-        alertsService.addMedical(Medical.builder().id(1).build());
-        verify(medicalDao, times(1)).save(any());
-    }
-    @Test
-    public void addMedicals() {
-        Medical medical = Medical.builder().build();
-        Medical medical2 = Medical.builder().build();
-        alertsService.addMedicals(List.of(medical, medical2));
-        verify(medicalDao, times(2)).save(any());
-    }
-    @Test
-    public void deleteMedical() {
-        alertsService.deleteMedical(1);
-        verify(medicalDao, times(1)).deleteById(1);
-    }
-    @Test
-    public void updateMedical() {
-        alertsService.updateMedical(Medical.builder().build());
-        verify(medicalDao).save(any());
-    }
-
 
     @Test
     public void getPersonEmail() {

@@ -11,14 +11,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table
+@Table(name="medical")
 public class Medical {
 
     @Id
     @GeneratedValue
     private int id;
+    @Column(name="last_name")
     private String lastName;
+    @Column(name="fist_name")
     private String firstName;
+    @Column(name="birthdate")
     private String birthdate;
     @ElementCollection
     @Column(name="medications")
