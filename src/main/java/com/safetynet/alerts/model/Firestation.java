@@ -21,7 +21,6 @@ public class Firestation {
     @Length(max=25)
     private String address;
     @Column(name="station")
-    @Length(max=25)
     private int station;
 
 }
