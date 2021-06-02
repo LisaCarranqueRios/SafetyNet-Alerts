@@ -3,6 +3,7 @@ package com.safetynet.alerts.mapper;
 import com.safetynet.alerts.model.Firestation;
 import com.safetynet.alerts.model.Medical;
 import com.safetynet.alerts.model.Person;
+import com.safetynet.alerts.utils.MapperUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

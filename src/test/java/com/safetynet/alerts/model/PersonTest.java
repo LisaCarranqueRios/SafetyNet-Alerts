@@ -11,15 +11,23 @@ public class PersonTest {
 
     @Test
     public void setAndGetPerson() {
-        Person person = Person.builder().build();
-        person.setId(1);
-        person.setEmail("dupont@mail.com");
-        person.setCity("Culver");
-        person.setZip("2345");
-        assertEquals(1, person.getId());
-        assertEquals("dupont@mail.com", person.getEmail());
-        assertEquals("Culver", person.getCity());
-        assertEquals("2345", person.getZip());
+        Person person = Person.builder().id(1).lastName("Smith")
+                .firstName("John").phone("023456")
+                .address("Culver St").city("Culver")
+                .email("john@mail.com")
+                .zip("2345").build();
+        person.setId(2);
+        person.setAddress("101 Culver St");
+        person.setPhone("0123456");
+        person.setEmail("smith@mail.com");
+        person.setCity("Coulver");
+        person.setZip("23456");
+        assertEquals(2, person.getId());
+        assertEquals("smith@mail.com", person.getEmail());
+        assertEquals("Coulver", person.getCity());
+        assertEquals("23456", person.getZip());
+        assertEquals("0123456", person.getPhone());
+        assertEquals("101 Culver St", person.getAddress());
     }
 
 }

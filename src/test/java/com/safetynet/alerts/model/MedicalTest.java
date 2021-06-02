@@ -17,13 +17,15 @@ public class MedicalTest {
                 .id(1).birthdate("11/1/1970").firstName("Jeanne")
                 .lastName("Martin").allergies(List.of("Gluten"))
                 .medications(List.of("Doliprane")).build();
+        medical.setLastName("Smith");
+        medical.setFirstName("John");
+        medical.setAllergies(List.of("Glutamine"));
+        medical.setMedications(List.of("Ibuprofene"));
         assertEquals(1, medical.getId());
         assertEquals("11/1/1970", medical.getBirthdate());
-        assertEquals("Jeanne", medical.getFirstName());
-        assertEquals("Martin", medical.getLastName());
-        assertEquals(List.of("Gluten"), medical.getAllergies());
-        assertEquals(List.of("Doliprane"), medical.getMedications());
-        medical.setLastName("Dupont");
-        assertEquals("Dupont", medical.getLastName());
+        assertEquals("John", medical.getFirstName());
+        assertEquals("Smith", medical.getLastName());
+        assertEquals(List.of("Glutamine"), medical.getAllergies());
+        assertEquals(List.of("Ibuprofene"), medical.getMedications());
     }
 }

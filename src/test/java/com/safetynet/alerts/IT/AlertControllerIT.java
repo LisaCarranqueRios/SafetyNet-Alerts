@@ -1,14 +1,16 @@
 package com.safetynet.alerts.IT;
 
 import com.safetynet.alerts.controller.AlertController;
+import com.safetynet.alerts.controller.FirestationController;
+import com.safetynet.alerts.controller.MedicalController;
+import com.safetynet.alerts.controller.PersonController;
 import com.safetynet.alerts.dao.FirestationDao;
 import com.safetynet.alerts.dao.MedicalDao;
 import com.safetynet.alerts.dao.PersonDao;
 import com.safetynet.alerts.model.Firestation;
 import com.safetynet.alerts.model.Medical;
 import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.service.AlertsService;
-import com.safetynet.alerts.service.IAlertsService;
+import com.safetynet.alerts.service.*;
 import com.safetynet.alerts.utils.AlertsUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -30,12 +32,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(classes = {AlertController.class, IAlertsService.class, AlertsService.class, AlertsUtils.class})
+@SpringBootTest(classes = {AlertController.class, FirestationController.class,
+        MedicalController.class, PersonController.class,
+        IMedicalService.class, MedicalService.class,
+        IPersonService.class, PersonService.class,
+        IFirestationService.class, FirestationService.class,
+        IAlertsService.class, AlertsService.class, AlertsUtils.class})
 @AutoConfigureMockMvc
 @EnableAutoConfiguration
 @EnableJpaRepositories(basePackageClasses = {MedicalDao.class, PersonDao.class, FirestationDao.class})
 @EntityScan(basePackageClasses = {Medical.class, Firestation.class, Person.class})
-public class AlertControllerFetchDataIT {
+public class AlertControllerIT {
 
     @Autowired
     private MockMvc mockMvc;

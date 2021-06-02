@@ -1,5 +1,6 @@
-package com.safetynet.alerts.mapper;
+package com.safetynet.alerts.utils;
 
+import com.safetynet.alerts.mapper.PersonMapper;
 import com.safetynet.alerts.model.Person;
 
 import java.util.ArrayList;
