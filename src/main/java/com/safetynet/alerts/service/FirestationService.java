@@ -6,17 +6,17 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.transaction.Transactional;
 import java.net.URI;
 import java.util.List;
 
 @Log4j2
 @Service
-@Transactional
 public class FirestationService implements IFirestationService {
 
     @Autowired
@@ -27,16 +27,19 @@ public class FirestationService implements IFirestationService {
      *
      * @return
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW,  readOnly = true)
     public List<Firestation> listFirestation() {
         log.debug("List all the firestations");
         return firestationDao.findAll();
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW,  readOnly = true)
     public Firestation displayFirestation(@PathVariable int id) {
         log.debug("Select a firestation by id");
         return firestationDao.findById(id);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ResponseEntity<Object> addFirestation(@RequestBody Firestation firestation) {
         Firestation firestationAdded = firestationDao.save(firestation);
         if (firestationAdded == null)
@@ -50,6 +53,7 @@ public class FirestationService implements IFirestationService {
         return ResponseEntity.created(location).build();
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void addFirestations(@RequestBody List<Firestation> firestations) {
         for (Firestation firestation : firestations) {
             Firestation firestationAdded = firestationDao.save(firestation);
@@ -57,11 +61,13 @@ public class FirestationService implements IFirestationService {
         log.info("Firestations added into database");
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteFirestation(@PathVariable int id) {
         firestationDao.deleteById(id);
         log.info("Firestation removed from database");
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateFirestation(@RequestBody Firestation firestation) {
         firestationDao.save(firestation);
         log.info("Firestation saved into database");

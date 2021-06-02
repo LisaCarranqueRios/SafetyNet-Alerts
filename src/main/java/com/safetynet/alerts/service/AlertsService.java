@@ -8,15 +8,16 @@ import com.safetynet.alerts.utils.AlertsUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW,  readOnly = true)
 public class AlertsService implements IAlertsService {
 
     @Autowired

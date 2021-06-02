@@ -6,17 +6,17 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.transaction.Transactional;
 import java.net.URI;
 import java.util.List;
 
 @Log4j2
 @Service
-@Transactional
 public class MedicalService implements IMedicalService {
 
     @Autowired
@@ -27,16 +27,19 @@ public class MedicalService implements IMedicalService {
      *
      * @return
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW,  readOnly = true)
     public List<Medical> listMedical() {
         log.debug("List all medical data stored into database");
         return medicalDao.findAll();
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW,  readOnly = true)
     public Medical displayMedical(@PathVariable int id) {
         log.debug("Select a medical data by id");
         return medicalDao.findById(id);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ResponseEntity<Object> addMedical(@RequestBody Medical medical) {
         Medical medicalAdded = medicalDao.save(medical);
         if (medicalAdded == null)
@@ -50,6 +53,7 @@ public class MedicalService implements IMedicalService {
         return ResponseEntity.created(location).build();
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void addMedicals(@RequestBody List<Medical> medicals) {
         for (Medical medical : medicals) {
             Medical medicalAdded = medicalDao.save(medical);
@@ -57,11 +61,13 @@ public class MedicalService implements IMedicalService {
         log.info("All Medical data saved into database");
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteMedical(@PathVariable int id) {
         medicalDao.deleteById(id);
         log.info("Medical data removed from database");
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateMedical(@RequestBody Medical medical) {
         medicalDao.save(medical);
         log.info("Medical data saved into database");
