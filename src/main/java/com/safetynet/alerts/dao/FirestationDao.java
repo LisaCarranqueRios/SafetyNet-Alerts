@@ -1,20 +1,19 @@
 package com.safetynet.alerts.dao;
 
 import com.safetynet.alerts.model.Firestation;
-import com.safetynet.alerts.model.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * This interface contains methods to manage firestation data
+ */
+@Repository
 public interface FirestationDao extends JpaRepository<Firestation, Integer> {
 
-    public List<Firestation> findAll();
     public Firestation findById(int id);
-    public Firestation save(Firestation firestation);
 
     void deleteById(int id);
 
