@@ -1,6 +1,8 @@
 package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.dao.PersonDao;
+import com.safetynet.alerts.mapper.ChildMapper;
+import com.safetynet.alerts.mapper.CountMapper;
 import com.safetynet.alerts.utils.MapperUtils;
 import com.safetynet.alerts.mapper.PersonMapper;
 import com.safetynet.alerts.model.Person;
@@ -140,7 +142,7 @@ public class AlertsService implements IAlertsService {
      * @return
      */
     @Override
-    public List<Object> getChildrenAtAddress(@PathVariable("address") String address) {
+    public ChildMapper getChildrenAtAddress(@PathVariable("address") String address) {
         List<Person> personCovered = personDao.findByAddress(address);
         for (Person person : personCovered) {
             person.setStation(person.getFirestation().getStation());
@@ -159,18 +161,16 @@ public class AlertsService implements IAlertsService {
      * @return
      */
     @Override
-    public List<Object> getPersonCoveredByFirestation(@PathVariable("station") int station) {
-        List<Object> personCoveredByFirestation = new ArrayList<>();
+    public CountMapper getPersonCoveredByFirestation(@PathVariable("station") int station) {
         List<Person> personCovered = personDao.findByStation(station);
         for (Person person : personCovered) {
             person.setStation(station);
         }
         List<PersonMapper> personCoveredMapper = MapperUtils.getPersonCoveredByFirestationMapper(personCovered);
-        List<Object> count = alertsUtils.getPersonCount(personCovered);
-        personCoveredByFirestation.add(personCoveredMapper);
-        personCoveredByFirestation.add(count);
+        CountMapper count = alertsUtils.getPersonCount(personCovered);
+        count.setPersonsAtFirestation(personCoveredMapper);
         log.info("Get person with adult and child count covered by firestation with station number "+ station);
-        return personCoveredByFirestation;
+        return count;
     }
 
 }

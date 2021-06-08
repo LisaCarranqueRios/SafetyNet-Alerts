@@ -1,5 +1,7 @@
 package com.safetynet.alerts.service;
 
+import com.safetynet.alerts.mapper.ChildMapper;
+import com.safetynet.alerts.mapper.CountMapper;
 import com.safetynet.alerts.model.Person;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -81,7 +83,7 @@ public interface IAlertsService {
      * @param address
      * @return
      */
-    public List<Object> getChildrenAtAddress(String address);
+    public ChildMapper getChildrenAtAddress(String address);
 
 
     /**
@@ -93,7 +95,7 @@ public interface IAlertsService {
      * @param station
      * @return
      */
-    public List<Object> getPersonCoveredByFirestation(int station);
+    public CountMapper getPersonCoveredByFirestation(int station);
 
 }
 

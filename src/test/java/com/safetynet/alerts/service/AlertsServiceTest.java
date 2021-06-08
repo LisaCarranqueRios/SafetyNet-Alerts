@@ -1,9 +1,9 @@
 package com.safetynet.alerts.service;
 
 
-import com.safetynet.alerts.dao.FirestationDao;
-import com.safetynet.alerts.dao.MedicalDao;
 import com.safetynet.alerts.dao.PersonDao;
+import com.safetynet.alerts.mapper.ChildMapper;
+import com.safetynet.alerts.mapper.CountMapper;
 import com.safetynet.alerts.mapper.PersonMapper;
 import com.safetynet.alerts.model.Firestation;
 import com.safetynet.alerts.model.Medical;
@@ -16,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -72,6 +71,8 @@ public class AlertsServiceTest {
 
     @Test
     public void getPersonCoveredByFirestation() {
+        CountMapper count = CountMapper.builder().adultCount(1).childCount(1).build();
+        when(alertsUtils.getPersonCount(anyList())).thenReturn(count);
         alertsService.getPersonCoveredByFirestation(1);
         verify(personDao, times(1)).findByStation(anyInt());
     }
@@ -123,6 +124,7 @@ public class AlertsServiceTest {
         assertEquals(Integer.valueOf(1), personAtAddressWithFirestationCoverage.get(1).getStation());
     }
 
+
     @Test
     public void getChildrenAtAddressReturnChildren() {
         Firestation firestation = Firestation.builder().address("101 Street").station(1).build();
@@ -136,11 +138,6 @@ public class AlertsServiceTest {
                 .address("101 Street").age(5).firestation(firestation).medical(medical2).build();
         List<Person> persons = List.of(person1, person2);
 
-        List<Object> listChildAndHouse = new ArrayList<>();
-        List<Object> children = new ArrayList<>();
-        children.add("children list");
-        List<Object> houseMembers = new ArrayList<>();
-        houseMembers.add("adult house members");
         PersonMapper personMapper1 = PersonMapper.builder()
                 .firstName(person1.getFirstName())
                 .lastName(person1.getLastName())
@@ -151,21 +148,12 @@ public class AlertsServiceTest {
                 .lastName(person2.getLastName())
                 .age(AlertsUtils.getAge(person2.getMedical().getBirthdate()))
                 .build();
-        children.add(personMapper1);
-        houseMembers.add(personMapper2);
-        listChildAndHouse.add(children);
-        listChildAndHouse.add(houseMembers);
 
         when(personDao.findByAddress("101 Street")).thenReturn(persons);
-        when(alertsUtils.listChildAndHouse(persons)).thenReturn(listChildAndHouse);
-        List<Object>  childrenAtAddress =  alertsService.getChildrenAtAddress("101 Street");
-        List<Object> output1 = (List<Object>) childrenAtAddress.get(0);
-        List<Object> output2 = (List<Object>) childrenAtAddress.get(1);
-        assertEquals(2, output1.size());
-        assertEquals("children list", output1.get(0));
-        assertEquals(2, output2.size());
-        assertEquals(personMapper2, output2.get(1));
-        assertEquals(2, childrenAtAddress.size());
+        when(alertsUtils.listChildAndHouse(persons)).thenReturn(ChildMapper.builder().children(List.of(personMapper1)).houseMembers(List.of(personMapper2)).build());
+        ChildMapper childrenAtAddress =  alertsService.getChildrenAtAddress("101 Street");
+        assertEquals(1, childrenAtAddress.getChildren().size());
+        assertEquals(1, childrenAtAddress.getHouseMembers().size());
      }
 
     @Test
@@ -195,13 +183,11 @@ public class AlertsServiceTest {
         List<Object> personMappers = List.of(personMapper1, personMapper2);
 
         when(personDao.findByStation(1)).thenReturn(persons);
-        when(alertsUtils.getPersonCount(any())).thenReturn(List.of(2,0));
-        List<Object>  personCoveredByFirestation =  alertsService.getPersonCoveredByFirestation(1);
-        List<Object> output1 = (List<Object>) personCoveredByFirestation.get(0);
-        List<Object> output2 = (List<Object>) personCoveredByFirestation.get(1);
-        assertEquals(2, alertsService.getPersonCoveredByFirestation(1).size());
-        assertEquals(2, output1.size());
-        assertTrue(alertsService.getPersonCoveredByFirestation(1).get(1).equals(List.of(2,0)));
+        when(alertsUtils.getPersonCount(any())).thenReturn(CountMapper.builder().childCount(1).adultCount(1).build());
+        CountMapper personCoveredByFirestation =  alertsService.getPersonCoveredByFirestation(1);
+        assertEquals(1, personCoveredByFirestation.getAdultCount());
+        assertEquals(1, personCoveredByFirestation.getChildCount());
+        assertEquals(2, personCoveredByFirestation.getPersonsAtFirestation().size());
     }
 
 }
