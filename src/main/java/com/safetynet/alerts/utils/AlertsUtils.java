@@ -1,5 +1,7 @@
 package com.safetynet.alerts.utils;
 
+import com.safetynet.alerts.mapper.ChildMapper;
+import com.safetynet.alerts.mapper.CountMapper;
 import com.safetynet.alerts.mapper.PersonMapper;
 import com.safetynet.alerts.model.Person;
 import lombok.extern.log4j.Log4j2;
@@ -36,7 +38,7 @@ public class AlertsUtils {
      * @param personCoveredByFirestation the selected list of person
      * @return an object with the count of adults and the count of children in this list
      */
-    public List<Object> getPersonCount(List<Person> personCoveredByFirestation) {
+    public CountMapper getPersonCount(List<Person> personCoveredByFirestation) {
         int i = 0;
         int j = 0;
         for (Person person : personCoveredByFirestation) {
@@ -46,13 +48,8 @@ public class AlertsUtils {
                 j += 1;
             }
         }
-        List<Object> count = new ArrayList<>();
-        count.add("adultCount");
-        count.add(j);
-        count.add("childCount");
-        count.add(i);
         log.debug("Calculate the number of children and the number of adults in the list of persons");
-        return count;
+        return CountMapper.builder().childCount(i).adultCount(j).build();
     }
 
     /**
@@ -60,12 +57,9 @@ public class AlertsUtils {
      * @param personCoveredByFirestation the selected list of person in a house
      * @return an object with the list of children and the list of the associated house members
      */
-    public List<Object> listChildAndHouse(List<Person> personCoveredByFirestation) {
-        List<Object> listChildAndHouse = new ArrayList<>();
-        List<Object> children = new ArrayList<>();
-        children.add("children list");
-        List<Object> houseMembers = new ArrayList<>();
-        houseMembers.add("adult house members");
+    public ChildMapper listChildAndHouse(List<Person> personCoveredByFirestation) {
+        List<PersonMapper> children = new ArrayList<>();
+        List<PersonMapper> houseMembers = new ArrayList<>();
         for (Person person : personCoveredByFirestation) {
             PersonMapper personMapper = PersonMapper.builder()
                     .firstName(person.getFirstName())
@@ -78,10 +72,9 @@ public class AlertsUtils {
                 houseMembers.add(personMapper);
             }
         }
-        listChildAndHouse.add(children);
-        listChildAndHouse.add(houseMembers);
+        ChildMapper childAndHouseMapper = ChildMapper.builder().children(children).houseMembers(houseMembers).build();
         log.debug("List all the children and their house members in the selected house");
-        return listChildAndHouse;
+        return childAndHouseMapper;
     }
 
 }

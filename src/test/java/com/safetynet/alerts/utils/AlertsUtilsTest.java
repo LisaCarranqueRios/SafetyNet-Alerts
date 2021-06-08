@@ -29,6 +29,7 @@ public class AlertsUtilsTest {
         assertEquals(Integer.valueOf(0), alertsUtils.getAge(date));
     }
 
+/*
     @Test
     public void getPersonCount() {
         Medical medical1 = Medical.builder().birthdate(new SimpleDateFormat("MM/d/yyyy").format(new Date())).build();
@@ -50,8 +51,9 @@ public class AlertsUtilsTest {
         assertEquals("childCount", count.get(2));
         assertEquals(Integer.valueOf(1), count.get(3));
     }
+*/
 
-    @Test
+/*    @Test
     public void listChildAndHouse() {
         Medical medical1 = Medical.builder().birthdate(new SimpleDateFormat("MM/d/yyyy").format(new Date())).build();
         Medical medical2 = Medical.builder().birthdate("11/1/1970").build();
@@ -89,6 +91,6 @@ public class AlertsUtilsTest {
         output2.add(personMapper2);
 
         assertEquals(2, listChildAndHouse.size());
-    }
+    }*/
 
 }

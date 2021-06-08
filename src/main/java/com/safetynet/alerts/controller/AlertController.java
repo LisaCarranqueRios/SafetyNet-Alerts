@@ -1,5 +1,7 @@
 package com.safetynet.alerts.controller;
 
+import com.safetynet.alerts.mapper.ChildMapper;
+import com.safetynet.alerts.mapper.CountMapper;
 import com.safetynet.alerts.utils.MapperUtils;
 import com.safetynet.alerts.mapper.PersonMapper;
 import com.safetynet.alerts.model.Person;
@@ -100,7 +102,7 @@ public class AlertController {
      * @return the list of children with their house members
      */
     @GetMapping(value = "/childAlert/{address}")
-    public List<Object> getChildrenAtAddress(@PathVariable("address") String address) {
+    public ChildMapper getChildrenAtAddress(@PathVariable("address") String address) {
         return alertsService.getChildrenAtAddress(address);
     }
 
@@ -115,7 +117,7 @@ public class AlertController {
      * @return the list person information 
      */
     @GetMapping(value = "/firestation")
-    public List<Object> getPersonCoveredByFirestation(@RequestParam("stationNumber") int station) {
+    public CountMapper getPersonCoveredByFirestation(@RequestParam("stationNumber") int station) {
         return alertsService.getPersonCoveredByFirestation(station);
     }
 
