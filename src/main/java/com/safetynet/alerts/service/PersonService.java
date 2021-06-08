@@ -38,16 +38,19 @@ public class PersonService  implements IPersonService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW,  readOnly = true)
+    @Override
     public List<Person> listPerson() {
         return personDao.findAll();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW,  readOnly = true)
+    @Override
     public Person displayPerson(@PathVariable int id) {
         return personDao.findById(id);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
     public ResponseEntity<Object> addPerson(@RequestBody Person person) {
         Person personAdded = personDao.save(person);
         if (personAdded == null)
@@ -62,6 +65,7 @@ public class PersonService  implements IPersonService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
     public void addPersons(@RequestBody List<Person> persons) {
         for (Person person : persons) {
             List<Medical> medicals = medicalDao.findAll();
@@ -80,12 +84,14 @@ public class PersonService  implements IPersonService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
     public void deletePerson(@PathVariable int id) {
         personDao.deleteById(id);
         log.info("Person removed from database");
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
     public void updatePerson(@RequestBody Person person) {
         personDao.save(person);
         log.info("Person updated into database");
