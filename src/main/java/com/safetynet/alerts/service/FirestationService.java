@@ -28,18 +28,21 @@ public class FirestationService implements IFirestationService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW,  readOnly = true)
+    @Override
     public List<Firestation> listFirestation() {
         log.debug("List all the firestations");
         return firestationDao.findAll();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW,  readOnly = true)
+    @Override
     public Firestation displayFirestation(@PathVariable int id) {
         log.debug("Select a firestation by id");
         return firestationDao.findById(id);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
     public ResponseEntity<Object> addFirestation(@RequestBody Firestation firestation) {
         Firestation firestationAdded = firestationDao.save(firestation);
         if (firestationAdded == null)
@@ -54,20 +57,23 @@ public class FirestationService implements IFirestationService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
     public void addFirestations(@RequestBody List<Firestation> firestations) {
         for (Firestation firestation : firestations) {
-            Firestation firestationAdded = firestationDao.save(firestation);
+            firestationDao.save(firestation);
         }
         log.info("Firestations added into database");
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
     public void deleteFirestation(@PathVariable int id) {
         firestationDao.deleteById(id);
         log.info("Firestation removed from database");
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
     public void updateFirestation(@RequestBody Firestation firestation) {
         firestationDao.save(firestation);
         log.info("Firestation saved into database");

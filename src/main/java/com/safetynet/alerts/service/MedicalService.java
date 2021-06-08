@@ -28,18 +28,21 @@ public class MedicalService implements IMedicalService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW,  readOnly = true)
+    @Override
     public List<Medical> listMedical() {
         log.debug("List all medical data stored into database");
         return medicalDao.findAll();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW,  readOnly = true)
+    @Override
     public Medical displayMedical(@PathVariable int id) {
         log.debug("Select a medical data by id");
         return medicalDao.findById(id);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
     public ResponseEntity<Object> addMedical(@RequestBody Medical medical) {
         Medical medicalAdded = medicalDao.save(medical);
         if (medicalAdded == null)
@@ -54,6 +57,7 @@ public class MedicalService implements IMedicalService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
     public void addMedicals(@RequestBody List<Medical> medicals) {
         for (Medical medical : medicals) {
             Medical medicalAdded = medicalDao.save(medical);
@@ -62,12 +66,14 @@ public class MedicalService implements IMedicalService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
     public void deleteMedical(@PathVariable int id) {
         medicalDao.deleteById(id);
         log.info("Medical data removed from database");
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
     public void updateMedical(@RequestBody Medical medical) {
         medicalDao.save(medical);
         log.info("Medical data saved into database");
