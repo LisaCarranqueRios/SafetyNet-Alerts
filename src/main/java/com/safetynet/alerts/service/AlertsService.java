@@ -1,6 +1,7 @@
 package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.dao.PersonDao;
+import com.safetynet.alerts.exception.AlertsException;
 import com.safetynet.alerts.mapper.ChildMapper;
 import com.safetynet.alerts.mapper.CountMapper;
 import com.safetynet.alerts.utils.MapperUtils;
@@ -44,6 +45,7 @@ public class AlertsService implements IAlertsService {
     @Override
     public List<String> getPersonEmail(@PathVariable("city") String city) {
         List<String> personEmail = personDao.getPersonEmail(city);
+        if(personEmail==null||personEmail.isEmpty()) throw new AlertsException("Erreur lors de la récupération des emails.");
         log.info("List all person emails from city " + city);
         return personEmail;
     }
@@ -61,6 +63,7 @@ public class AlertsService implements IAlertsService {
         for (Person person : persons) {
             person.setAge(alertsUtils.getAge(person.getMedical().getBirthdate()));
         }
+        if(persons==null||persons.isEmpty()) throw new AlertsException("Erreur lors de la récupération de la personne.");
         log.info("Fetch person by firstname and lastname :" + firstName + " " + lastName);
         return persons;
     }
@@ -75,6 +78,8 @@ public class AlertsService implements IAlertsService {
         for (Person person : personCovered) {
             person.setAge(alertsUtils.getAge(person.getMedical().getBirthdate()));
         }
+        if(personCovered==null||personCovered.isEmpty()) throw new AlertsException("Erreur lors de la récupération des résidents à l'adresse " +
+                "couverte par la station : " + station);
         log.info("Fetch person at address covered by firestation with station number" + station);
         return personCovered;
     }
@@ -113,6 +118,7 @@ public class AlertsService implements IAlertsService {
             person.setStation(person.getFirestation().getStation());
             person.setAge(AlertsUtils.getAge(person.getMedical().getBirthdate()));
         }
+        if(personCovered==null||personCovered.isEmpty()) throw new AlertsException("Erreur lors de la récupération des résidents à l'adresse : " + address);
         log.info("Fetch person information and their medical data at address " + address);
         return personCovered;
     }
@@ -128,7 +134,9 @@ public class AlertsService implements IAlertsService {
     @Override
     public List<Person> getPersonCoveredByFirestationPhoneNumber(@PathVariable("station") int station) {
         List<Person> personCovered = personDao.findByStation(station);
-        log.info("List phone numbers for persons covered by firestation with station number " + station);
+        if(personCovered==null||personCovered.isEmpty()) throw new AlertsException("Erreur lors de la récupération des " +
+                "numéros de téléphone des résidents couverts par la station : " + station);
+        log.info("List phone numbers for persons covered by firestation with station : " + station);
         return personCovered;
     }
 
@@ -147,6 +155,7 @@ public class AlertsService implements IAlertsService {
         for (Person person : personCovered) {
             person.setStation(person.getFirestation().getStation());
         }
+        if(personCovered==null||personCovered.isEmpty()) throw new AlertsException("Erreur lors de la récupération des enfants résidents à l'adresse : " + address);
         log.info("Fetch children information and their house members at address" + address);
         return alertsUtils.listChildAndHouse(personCovered);
     }
@@ -168,6 +177,7 @@ public class AlertsService implements IAlertsService {
         }
         List<PersonMapper> personCoveredMapper = MapperUtils.getPersonCoveredByFirestationMapper(personCovered);
         CountMapper count = alertsUtils.getPersonCount(personCovered);
+        if(personCoveredMapper.isEmpty()) throw new AlertsException("Erreur lors de la récupération des personnes couvertes par la caserne : " +station);
         count.setPersonsAtFirestation(personCoveredMapper);
         log.info("Get person with adult and child count covered by firestation with station number "+ station);
         return count;

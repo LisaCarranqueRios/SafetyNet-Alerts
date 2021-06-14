@@ -48,17 +48,27 @@ public class FirestationControllerIT {
      */
     @Test
     public void testListFirestation() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get("/firestations"))
+        String jsonbody = "{ \"address\":\"1509 Culver St\", \"station\":\"30\" }";
+        MvcResult mvcResult = this.mockMvc.perform(post("/firestation").content(jsonbody).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn();
+        MvcResult mvcResult2 = this.mockMvc.perform(get("/firestations"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
-        assertEquals("application/json",
-                mvcResult.getResponse().getContentType());
     }
 
     @Test
     public void testDisplayFirestation() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get("/firestations/1"))
+        String jsonbody = "{ \"address\":\"1509 Culver St\", \"station\":\"30\" }";
+        MvcResult mvcResult = this.mockMvc.perform(post("/firestation").content(jsonbody).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn();
+        String savedLocation = mvcResult.getResponse().getHeaders("Location").get(0).toString();
+        String id = savedLocation.replaceAll("[^0-9]", "");
+        MvcResult mvcResult2 = this.mockMvc.perform(get("/firestations/{id}", id))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();

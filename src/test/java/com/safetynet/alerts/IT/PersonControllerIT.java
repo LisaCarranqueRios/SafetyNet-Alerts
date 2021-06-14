@@ -49,17 +49,27 @@ public class PersonControllerIT {
    */
     @Test
     public void testListPerson() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get("/persons"))
+        String jsonbody = "{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }";
+        MvcResult mvcResult = this.mockMvc.perform(post("/person").content(jsonbody).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn();
+        MvcResult mvcResult2 = this.mockMvc.perform(get("/persons"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
-        assertEquals("application/json",
-                mvcResult.getResponse().getContentType());
     }
 
     @Test
     public void testDisplayPerson() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get("/persons/1"))
+        String jsonbody = "{ \"firstName\":\"John\", \"lastName\":\"Boyd\", \"address\":\"1509 Culver St\", \"city\":\"Culver\", \"zip\":\"97451\", \"phone\":\"841-874-6512\", \"email\":\"jaboyd@email.com\" }";
+        MvcResult mvcResult = this.mockMvc.perform(post("/person").content(jsonbody).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn();
+        String savedLocation = mvcResult.getResponse().getHeaders("Location").get(0).toString();
+        String id = savedLocation.replaceAll("[^0-9]", "");
+        MvcResult mvcResult2 = this.mockMvc.perform(get("/persons/{id}", id))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
