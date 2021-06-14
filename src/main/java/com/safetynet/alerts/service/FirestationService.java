@@ -1,6 +1,7 @@
 package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.dao.FirestationDao;
+import com.safetynet.alerts.exception.FirestationsException;
 import com.safetynet.alerts.model.Firestation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -31,14 +33,20 @@ public class FirestationService implements IFirestationService {
     @Override
     public List<Firestation> listFirestation() {
         log.debug("List all the firestations");
-        return firestationDao.findAll();
+        List<Firestation> firestations = firestationDao.findAll();
+        if(firestations==null||firestations.isEmpty()) throw new FirestationsException("Erreur lors de la récupération des casernes");
+        log.info("All firestations : "+ firestations);
+        return firestations;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW,  readOnly = true)
     @Override
     public Firestation displayFirestation(@PathVariable int id) {
         log.debug("Select a firestation by id");
-        return firestationDao.findById(id);
+        Firestation firestation = firestationDao.findById(id);
+        if(firestation==null) throw new FirestationsException("Erreur lors de la récupération de la caserne");
+        log.info("Targeted firestation : "+ firestation);
+        return firestation;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -59,9 +67,13 @@ public class FirestationService implements IFirestationService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void addFirestations(@RequestBody List<Firestation> firestations) {
+        List<Firestation> firestationsOutput = new ArrayList<>();
         for (Firestation firestation : firestations) {
-            firestationDao.save(firestation);
+            Firestation firestationSaved = firestationDao.save(firestation);
+            firestationsOutput.add(firestationSaved);
+            if (firestationSaved == null) log.error("L'ajout de la caserne " + firestation.getId() + " n'a pas bien fonctionné");
         }
+        if (firestationsOutput.contains(null)) throw new FirestationsException("Une erreur est survenue durant l'ajout des casernes");
         log.info("Firestations added into database");
     }
 
@@ -69,13 +81,15 @@ public class FirestationService implements IFirestationService {
     @Override
     public void deleteFirestation(@PathVariable int id) {
         firestationDao.deleteById(id);
+        if (firestationDao.findById(id)!=null) throw new FirestationsException("Une erreur est survenue durant la suppression de la caserne");
         log.info("Firestation removed from database");
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void updateFirestation(@RequestBody Firestation firestation) {
-        firestationDao.save(firestation);
+        Firestation firestationSaved = firestationDao.save(firestation);
+        if (firestationSaved == null) throw new FirestationsException("Une erreur est survenue durant la mise à jour de la caserne");
         log.info("Firestation saved into database");
     }
 

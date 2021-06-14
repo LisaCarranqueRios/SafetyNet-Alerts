@@ -50,17 +50,27 @@ public class MedicalControllerIT {
      */
     @Test
     public void testListMedical() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get("/medicals"))
+        String jsonbody = "{ \"firstName\":\"Eric\", \"lastName\":\"Cadigan\", \"birthdate\":\"08/06/1945\", \"medications\":[\"tradoxidine:400mg\"], \"allergies\":[] }";
+        MvcResult mvcResult = this.mockMvc.perform(post("/medical").content(jsonbody).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn();
+        MvcResult mvcResult2 = this.mockMvc.perform(get("/medicals"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
-        assertEquals("application/json",
-                mvcResult.getResponse().getContentType());
     }
 
     @Test
     public void testDisplayMedical() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get("/medicals/{id}", 1))
+        String jsonbody = "{ \"id\":\"1\", \"firstName\":\"Eric\", \"lastName\":\"Cadigan\", \"birthdate\":\"08/06/1945\", \"medications\":[\"tradoxidine:400mg\"], \"allergies\":[] }";
+        MvcResult mvcResult = this.mockMvc.perform(post("/medical").content(jsonbody).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn();
+        String savedLocation = mvcResult.getResponse().getHeaders("Location").get(0).toString();
+        String id = savedLocation.replaceAll("[^0-9]", "");
+        MvcResult mvcResult2 = this.mockMvc.perform(get("/medicals/{id}", id))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();

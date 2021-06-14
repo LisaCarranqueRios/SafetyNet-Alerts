@@ -25,11 +25,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackageClasses = {PersonDao.class})
 public class Alerts  {
 
-/*    @Bean
+    @Bean
     public HttpTraceRepository htttpTraceRepository()
     {
         return new InMemoryHttpTraceRepository();
-    }*/
+    }
 
     public static void main(String[] args) {
         log.info("Initializing Alerts System");
